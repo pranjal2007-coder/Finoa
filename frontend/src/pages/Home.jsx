@@ -3,15 +3,18 @@ import { motion } from 'framer-motion'
 import { Line, Doughnut } from 'react-chartjs-2'
 import { Chart as ChartJS, LineElement, ArcElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend } from 'chart.js'
 import { api } from '../lib/api'
+import { useData } from '../lib/data'
 
 ChartJS.register(LineElement, ArcElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend)
 
 export default function Home() {
+  const { monthlyBudget, totalExpenseThisMonth, totalByCategoryThisMonth, addWant } = useData()
   const [aiQuestion, setAiQuestion] = useState('Suggest a way to save ₹1000 this month')
   const [aiAnswer, setAiAnswer] = useState('')
   const [loading, setLoading] = useState(false)
   const [preview, setPreview] = useState({ total: 0, byCategory: [] })
   const recognitionRef = useRef(null)
+  const [want, setWant] = useState({ title: '', dueDate: '' })
 
   useEffect(() => {
     // anonymous demo user id (frontend only demo)
@@ -73,11 +76,23 @@ export default function Home() {
     }]
   }), [])
 
+  const spentVsBudget = useMemo(() => ({
+    labels: ['Budget','Spent'],
+    datasets: [{ data: [Number(monthlyBudget||0), Number(totalExpenseThisMonth||0)], backgroundColor:['#3b82f6','#ef4444'] }]
+  }), [monthlyBudget, totalExpenseThisMonth])
+
+  function addQuickReminder(e) {
+    e.preventDefault()
+    if (!want.title || !want.dueDate) return
+    addWant(want)
+    setWant({ title: '', dueDate: '' })
+  }
+
   return (
     <div className="page">
       <div className="hero">
         <motion.div className="card" initial={{opacity:0, y:10}} animate={{opacity:1, y:0}}>
-          <h2>Welcome to Finova</h2>
+          <h2>Welcome to Finoa</h2>
           <p>Overview & quick finance summary. Track expenses, plan budgets, and get smart savings tips.</p>
           <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:12}}>
             <div className="card">
@@ -93,7 +108,7 @@ export default function Home() {
         <motion.div className="card" initial={{opacity:0, x:10}} animate={{opacity:1, x:0}}>
           <h3>AI Saving Tips</h3>
           <div style={{display:'flex', gap:8, flexWrap:'wrap'}}>
-            <input value={aiQuestion} onChange={e=>setAiQuestion(e.target.value)} style={{flex:1, minWidth:240}} placeholder="Ask Finova..." />
+            <input value={aiQuestion} onChange={e=>setAiQuestion(e.target.value)} style={{flex:1, minWidth:240}} placeholder="Ask Finoa..." />
             <button className="button" onClick={askAI} disabled={loading}>{loading? 'Thinking...' : 'Ask'}</button>
             <button className="button" onClick={startVoice} type="button">🎤 Voice</button>
             <button className="button" onClick={speakAnswer} type="button">🔊 Speak</button>
@@ -106,6 +121,28 @@ export default function Home() {
           </div>
         </motion.div>
       </div>
+
+      <motion.div className="card" initial={{opacity:0, y:10}} animate={{opacity:1, y:0}} style={{marginTop:12}}>
+        <h3>Budget Overview</h3>
+        <p>Monthly Budget: ₹{Number(monthlyBudget||0).toLocaleString('en-IN')} • Spent this month: ₹{Number(totalExpenseThisMonth||0).toLocaleString('en-IN')}</p>
+        <div style={{display:'flex', gap:8, flexWrap:'wrap', marginTop:8}}>
+          {Object.entries(totalByCategoryThisMonth).map(([c,amt]) => (
+            <div key={c} className="card" style={{padding:8}}>
+              <strong>{c}</strong>
+              <div>₹{Number(amt||0).toLocaleString('en-IN')}</div>
+            </div>
+          ))}
+        </div>
+      </motion.div>
+
+      <motion.div className="card" initial={{opacity:0, y:10}} animate={{opacity:1, y:0}} style={{marginTop:12}}>
+        <h3>Quick Reminder</h3>
+        <form onSubmit={addQuickReminder} style={{display:'flex', gap:8, flexWrap:'wrap'}}>
+          <input placeholder="Thing to buy" value={want.title} onChange={e=>setWant({...want, title:e.target.value})} />
+          <input type="date" value={want.dueDate} onChange={e=>setWant({...want, dueDate:e.target.value})} />
+          <button className="button" type="submit">Add Reminder</button>
+        </form>
+      </motion.div>
     </div>
   )
 }

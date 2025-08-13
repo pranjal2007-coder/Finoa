@@ -26,16 +26,16 @@ export default function ReportsInsights() {
 
   function exportPDF() {
     const doc = new jsPDF()
-    doc.text('Finova – Spending Report', 14, 16)
+    doc.text('Finoa – Spending Report', 14, 16)
     autoTable(doc, { head: [['Category','Amount (₹)']], body: rows.map(r=>[r.category, r.amount]) })
-    doc.save('finova-report.pdf')
+    doc.save('finoa-report.pdf')
   }
 
   function exportExcel() {
     const ws = XLSX.utils.json_to_sheet(rows)
     const wb = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(wb, ws, 'Report')
-    XLSX.writeFile(wb, 'finova-report.xlsx')
+    XLSX.writeFile(wb, 'finoa-report.xlsx')
   }
 
   return (

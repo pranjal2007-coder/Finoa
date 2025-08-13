@@ -1,7 +1,7 @@
 import { Routes, Route, NavLink } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useLocation } from 'react-router-dom'
-import { FaPiggyBank, FaChartPie, FaUserCircle } from 'react-icons/fa'
+import { FaPiggyBank, FaChartPie, FaUserCircle, FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from 'react-icons/fa'
 import Home from './pages/Home'
 import BudgetPlanner from './pages/BudgetPlanner'
 import ExpenseTracker from './pages/ExpenseTracker'
@@ -14,6 +14,8 @@ import ProfileSettings from './pages/ProfileSettings'
 import About from './pages/About'
 import Contact from './pages/Contact'
 import './App.css'
+import { DataProvider } from './lib/data'
+import ChatWidget from './components/ChatWidget'
 
 function NavBar() {
   const links = [
@@ -31,7 +33,7 @@ function NavBar() {
   ]
   return (
     <nav className="navbar">
-      <div className="brand"><FaPiggyBank /> Finova</div>
+      <div className="brand"><FaPiggyBank /> Finoa</div>
       <div className="nav-links">
         {links.map(l => (
           <NavLink key={l.to} to={l.to} className={({isActive}) => isActive ? 'active' : ''}>{l.label}</NavLink>
@@ -45,15 +47,50 @@ function NavBar() {
 function Footer() {
   return (
     <footer className="footer">
-      <div>
-        <strong>Finova</strong>
-        <p>123 Finance Street, Mumbai, MH 400001</p>
-        <p>Email: support@finova.example • Phone: +91 90000 00000</p>
+      <div className="brand">
+        <div style={{fontSize:24, lineHeight:1}}><FaPiggyBank /></div>
+        <div>
+          <strong style={{display:'block', fontSize:18}}>Finoa</strong>
+          <small>Finvolv simplifies how you manage, grow, and understand your money—with intelligent tools, real-time insights, and an all-in-one financial dashboard.</small>
+          <div style={{display:'flex', gap:10, marginTop:8}}>
+            <a href="#" aria-label="Facebook"><FaFacebook /></a>
+            <a href="#" aria-label="Twitter"><FaTwitter /></a>
+            <a href="#" aria-label="LinkedIn"><FaLinkedin /></a>
+            <a href="#" aria-label="Instagram"><FaInstagram /></a>
+          </div>
+          <div style={{marginTop:8, fontSize:14}}>
+            <div>India</div>
+            <div>Phone: 9999999999</div>
+          </div>
+        </div>
       </div>
-      <div className="footer-links">
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-        <a href="#">Careers</a>
+
+      <div className="col">
+        <h4>Product</h4>
+        <a href="/features">Features</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/career">Career</a>
+        <a href="/integration">Integration</a>
+        <a href="/faq">FAQ</a>
+      </div>
+
+      <div className="col">
+        <h4>Resources</h4>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a href="/blogs">Blogs</a>
+      </div>
+
+      <div className="col">
+        <h4>Legal</h4>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms & Conditions</a>
+      </div>
+
+      <div className="col">
+        <h4>User Account</h4>
+        <a href="/login">Login</a>
+        <a href="/signup">Sign Up</a>
       </div>
     </footer>
   )
@@ -81,6 +118,14 @@ function AnimatedRoutes() {
         <Route path="/profile" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><ProfileSettings /></motion.div>} />
         <Route path="/about" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><About /></motion.div>} />
         <Route path="/contact" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Contact /></motion.div>} />
+        <Route path="/features" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><div className="page"><div className="card"><h2>Features</h2><p>Explore Finoa features.</p></div></div></motion.div>} />
+        <Route path="/pricing" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><div className="page"><div className="card"><h2>Pricing</h2><p>Simple transparent plans.</p></div></div></motion.div>} />
+        <Route path="/career" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><div className="page"><div className="card"><h2>Career</h2><p>Join our team in India.</p></div></div></motion.div>} />
+        <Route path="/integration" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><div className="page"><div className="card"><h2>Integration</h2><p>Connect your tools and banks.</p></div></div></motion.div>} />
+        <Route path="/faq" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><div className="page"><div className="card"><h2>FAQ</h2><p>Frequently asked questions.</p></div></div></motion.div>} />
+        <Route path="/blogs" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><div className="page"><div className="card"><h2>Blogs</h2><p>Tips and stories on money.</p></div></div></motion.div>} />
+        <Route path="/privacy" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><div className="page"><div className="card"><h2>Privacy Policy</h2><p>Your data, protected.</p></div></div></motion.div>} />
+        <Route path="/terms" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><div className="page"><div className="card"><h2>Terms & Conditions</h2><p>Please read our terms.</p></div></div></motion.div>} />
       </Routes>
     </AnimatePresence>
   )
@@ -88,10 +133,13 @@ function AnimatedRoutes() {
 
 export default function App() {
   return (
-    <div className="app">
-      <NavBar />
-      <AnimatedRoutes />
-      <Footer />
-    </div>
+    <DataProvider>
+      <div className="app">
+        <NavBar />
+        <AnimatedRoutes />
+        <Footer />
+        <ChatWidget />
+      </div>
+    </DataProvider>
   )
 }
