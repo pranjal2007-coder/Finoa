@@ -42,15 +42,17 @@
 }
 
 .app { min-height: 100vh; display: flex; flex-direction: column; }
-.navbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: #0f172a; color: #e2e8f0; }
+.navbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: linear-gradient(90deg,#020617,#0b1220); color: #e2e8f0; box-shadow: 0 1px 0 #0b1220; }
 .navbar .brand { display:flex; align-items:center; gap:8px; font-weight:700; }
 .navbar .nav-links { display:flex; gap: 12px; }
 .navbar a { color: #cbd5e1; text-decoration: none; padding: 6px 10px; border-radius: 8px; }
 .navbar a.active, .navbar a:hover { background: #1e293b; color: #ffffff; }
 .navbar .nav-right { display:flex; gap:12px; font-size:20px; }
-.footer { margin-top: auto; background: #0f172a; color:#94a3b8; padding: 24px; display:flex; align-items:center; justify-content: space-between; }
-.footer a { color:#cbd5e1; text-decoration:none; margin-right:12px; }
-.footer a:hover { color: #ffffff; }
+.footer { margin-top: auto; background: #020617; color:#94a3b8; padding: 36px 24px; display:grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 16px; align-items:flex-start; }
+.footer .brand { display:flex; gap:10px; align-items:center; }
+.footer .col h4 { color:#e2e8f0; margin: 0 0 8px; font-size:14px; text-transform: uppercase; letter-spacing: .04em; }
+.footer .col a { display:block; color:#cbd5e1; text-decoration:none; margin:6px 0; font-size: 14px; }
+.footer .col a:hover { color: #ffffff; }
 .page { padding: 20px; max-width: 1100px; margin: 0 auto; }
 .card { background: #0b1220; color: #e2e8f0; border: 1px solid #1f2a44; padding: 16px; border-radius: 12px; }
 .button { background: #22c55e; color: #0b1220; border: none; padding: 10px 14px; border-radius: 10px; cursor:pointer; }
@@ -67,3 +69,7 @@ th, td { border-bottom: 1px solid #1f2a44; padding: 8px; text-align: left; }
 .fade-in { animation: fadeInUp 500ms ease-out; }
 .auth-card { max-width: 420px; margin: 0 auto; }
 .auth-form { display: grid; gap: 8px; margin-top: 8px; }
+.chat-widget { position: fixed; right: 20px; bottom: 20px; z-index: 40; }
+.chat-fab { background: linear-gradient(180deg,#1e3a8a,#3b82f6); color:#fff; border:none; padding:12px 16px; border-radius: 999px; cursor:pointer; box-shadow: 0 8px 24px rgba(59,130,246,.35); }
+.chat-panel { width: 320px; max-width: 80vw; background:#0b1220; color:#e2e8f0; border:1px solid #1f2a44; border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+.chat-answer { margin-top:8px; background:#0f172a; border:1px solid #1f2a44; padding:8px; border-radius:8px; }

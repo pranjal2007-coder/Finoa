@@ -8,7 +8,7 @@ export default function Login() {
   function submit(e) {
     e.preventDefault()
     const payload = { email, password, savedAt: new Date().toISOString() }
-    localStorage.setItem('finova_login', JSON.stringify(payload))
+    localStorage.setItem('finoa_login', JSON.stringify(payload))
     setSaved(true)
   }
 

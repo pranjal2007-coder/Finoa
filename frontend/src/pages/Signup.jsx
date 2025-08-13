@@ -9,7 +9,7 @@ export default function Signup() {
   function submit(e) {
     e.preventDefault()
     const payload = { name, email, password, savedAt: new Date().toISOString() }
-    localStorage.setItem('finova_user', JSON.stringify(payload))
+    localStorage.setItem('finoa_user', JSON.stringify(payload))
     setSaved(true)
   }
 
