@@ -1,8 +1,6 @@
 # 💰 AI Finance Assistant
 
 An **AI-powered personal finance assistant** web app that helps users manage budgets, track expenses, and get AI-driven financial insights.  
-Built with **Node.js + Express** for the backend, **lowdb** for database storage, and **JWT authentication**.  
-Frontend is connected via REST API calls to fetch and process data.  
 
 ---
 
@@ -20,11 +18,7 @@ Frontend is connected via REST API calls to fetch and process data.
 
 ### Backend
 - **Node.js** + **Express**
-- **lowdb** (Lightweight JSON database)
-- **JWT** (Authentication)
-- **Zod** (Data validation)
-- **Multer** (File uploads)
-- **Swagger** (API documentation)
+-
 
 ### Frontend
 - **React.js** (or any SPA framework)
