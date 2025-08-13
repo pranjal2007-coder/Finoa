@@ -7,6 +7,7 @@ import askRouter from './routes/ask.js';
 import transactionsRouter from './routes/transactions.js';
 import summaryRouter from './routes/summary.js';
 import usersRouter from './routes/users.js';
+import hctbotRouter from './routes/hctbot.js';
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use('/ask', askRouter);
 app.use('/transactions', transactionsRouter);
 app.use('/summary', summaryRouter);
 app.use('/users', usersRouter);
+app.use('/hctbot', hctbotRouter);
 
 app.use((req, res) => {
   res.status(404).json({ error: 'Not found' });

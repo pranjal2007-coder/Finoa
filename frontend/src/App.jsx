@@ -13,6 +13,14 @@ import Signup from './pages/Signup'
 import ProfileSettings from './pages/ProfileSettings'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import Features from './pages/Features'
+import Pricing from './pages/Pricing'
+import Career from './pages/Career'
+import Integration from './pages/Integration'
+import Faq from './pages/Faq'
+import Blogs from './pages/Blogs'
+import Privacy from './pages/Privacy'
+import Terms from './pages/Terms'
 import './App.css'
 import { DataProvider } from './lib/data'
 import ChatWidget from './components/ChatWidget'
@@ -33,7 +41,7 @@ function NavBar() {
   ]
   return (
     <nav className="navbar">
-      <div className="brand"><FaPiggyBank /> Finoa</div>
+      <div className="brand"><img src="/finoa-logo.svg" alt="Finoa" width="24" height="24" style={{borderRadius:6}}/> Finoa</div>
       <div className="nav-links">
         {links.map(l => (
           <NavLink key={l.to} to={l.to} className={({isActive}) => isActive ? 'active' : ''}>{l.label}</NavLink>
@@ -47,13 +55,13 @@ function NavBar() {
 function Footer() {
   return (
     <footer className="footer">
-      <div className="brand">
-        <div style={{fontSize:24, lineHeight:1}}><FaPiggyBank /></div>
-        <div>
-          <strong style={{display:'block', fontSize:18}}>Finoa</strong>
-          <small>Finvolv simplifies how you manage, grow, and understand your money—with intelligent tools, real-time insights, and an all-in-one financial dashboard.</small>
-          <div style={{display:'flex', gap:10, marginTop:8}}>
-            <a href="#" aria-label="Facebook"><FaFacebook /></a>
+             <div className="brand">
+         <img src="/finoa-logo.svg" alt="Finoa" width={32} height={32} style={{borderRadius:8}}/>
+         <div>
+           <strong style={{display:'block', fontSize:18}}>Finoa</strong>
+           <small>Finoa simplifies how you manage, grow, and understand your money—with intelligent tools, real-time insights, and an all-in-one financial dashboard.</small>
+           <div style={{display:'flex', gap:10, marginTop:8}}>
+<a href="#" aria-label="Facebook"><FaFacebook /></a>
             <a href="#" aria-label="Twitter"><FaTwitter /></a>
             <a href="#" aria-label="LinkedIn"><FaLinkedin /></a>
             <a href="#" aria-label="Instagram"><FaInstagram /></a>
@@ -67,24 +75,24 @@ function Footer() {
 
       <div className="col">
         <h4>Product</h4>
-        <a href="/features">Features</a>
-        <a href="/pricing">Pricing</a>
-        <a href="/career">Career</a>
-        <a href="/integration">Integration</a>
-        <a href="/faq">FAQ</a>
+        <NavLink to="/features">Features</NavLink>
+        <NavLink to="/pricing">Pricing</NavLink>
+        <NavLink to="/career">Career</NavLink>
+        <NavLink to="/integration">Integration</NavLink>
+        <NavLink to="/faq">FAQ</NavLink>
       </div>
 
       <div className="col">
         <h4>Resources</h4>
-        <a href="/about">About</a>
-        <a href="/contact">Contact</a>
-        <a href="/blogs">Blogs</a>
+        <NavLink to="/about">About</NavLink>
+        <NavLink to="/contact">Contact</NavLink>
+        <NavLink to="/blogs">Blogs</NavLink>
       </div>
 
       <div className="col">
         <h4>Legal</h4>
-        <a href="/privacy">Privacy Policy</a>
-        <a href="/terms">Terms & Conditions</a>
+        <NavLink to="/privacy">Privacy Policy</NavLink>
+        <NavLink to="/terms">Terms & Conditions</NavLink>
       </div>
 
       <div className="col">
@@ -106,27 +114,27 @@ function AnimatedRoutes() {
   const location = useLocation()
   return (
     <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        <Route path="/" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Home /></motion.div>} />
-        <Route path="/budget" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><BudgetPlanner /></motion.div>} />
-        <Route path="/expenses" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><ExpenseTracker /></motion.div>} />
-        <Route path="/savings" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><SavingsInvestments /></motion.div>} />
-        <Route path="/emergency" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><EmergencyFund /></motion.div>} />
-        <Route path="/reports" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><ReportsInsights /></motion.div>} />
-        <Route path="/login" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Login /></motion.div>} />
-        <Route path="/signup" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Signup /></motion.div>} />
-        <Route path="/profile" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><ProfileSettings /></motion.div>} />
-        <Route path="/about" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><About /></motion.div>} />
-        <Route path="/contact" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Contact /></motion.div>} />
-        <Route path="/features" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><div className="page"><div className="card"><h2>Features</h2><p>Explore Finoa features.</p></div></div></motion.div>} />
-        <Route path="/pricing" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><div className="page"><div className="card"><h2>Pricing</h2><p>Simple transparent plans.</p></div></div></motion.div>} />
-        <Route path="/career" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><div className="page"><div className="card"><h2>Career</h2><p>Join our team in India.</p></div></div></motion.div>} />
-        <Route path="/integration" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><div className="page"><div className="card"><h2>Integration</h2><p>Connect your tools and banks.</p></div></div></motion.div>} />
-        <Route path="/faq" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><div className="page"><div className="card"><h2>FAQ</h2><p>Frequently asked questions.</p></div></div></motion.div>} />
-        <Route path="/blogs" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><div className="page"><div className="card"><h2>Blogs</h2><p>Tips and stories on money.</p></div></div></motion.div>} />
-        <Route path="/privacy" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><div className="page"><div className="card"><h2>Privacy Policy</h2><p>Your data, protected.</p></div></div></motion.div>} />
-        <Route path="/terms" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><div className="page"><div className="card"><h2>Terms & Conditions</h2><p>Please read our terms.</p></div></div></motion.div>} />
-      </Routes>
+             <Routes location={location} key={location.pathname}>
+         <Route path="/" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Home /></motion.div>} />
+         <Route path="/budget" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><BudgetPlanner /></motion.div>} />
+         <Route path="/expenses" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><ExpenseTracker /></motion.div>} />
+         <Route path="/savings" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><SavingsInvestments /></motion.div>} />
+         <Route path="/emergency" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><EmergencyFund /></motion.div>} />
+         <Route path="/reports" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><ReportsInsights /></motion.div>} />
+         <Route path="/login" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Login /></motion.div>} />
+         <Route path="/signup" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Signup /></motion.div>} />
+         <Route path="/profile" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><ProfileSettings /></motion.div>} />
+         <Route path="/about" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><About /></motion.div>} />
+         <Route path="/contact" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Contact /></motion.div>} />
+         <Route path="/features" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Features /></motion.div>} />
+         <Route path="/pricing" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Pricing /></motion.div>} />
+         <Route path="/career" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Career /></motion.div>} />
+         <Route path="/integration" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Integration /></motion.div>} />
+         <Route path="/faq" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Faq /></motion.div>} />
+         <Route path="/blogs" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Blogs /></motion.div>} />
+         <Route path="/privacy" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Privacy /></motion.div>} />
+         <Route path="/terms" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Terms /></motion.div>} />
+       </Routes>
     </AnimatePresence>
   )
 }

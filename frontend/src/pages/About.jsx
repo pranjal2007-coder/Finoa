@@ -5,23 +5,29 @@ export default function About() {
     <div className="page">
       <motion.div className="card" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}}>
         <h2>About Us</h2>
-        <p>Finoa's mission is to empower everyone to make smarter money decisions with delightful tools and actionable insights.</p>
+        <p><strong>Mission:</strong> Help everyone save money effectively and invest wisely with delightful, secure tools.</p>
+        <p><strong>Vision:</strong> Financial freedom for every household in India.</p>
         <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:12, marginTop:12}}>
           <div className="card">
             <h3>Our Story</h3>
-            <p>Founded in India, we are building an all-in-one financial dashboard for budgeting, tracking, and saving.</p>
+            <p>We noticed people struggle with scattered tools and confusing advice. Finoa brings AI guidance, budgeting, and investments into one simple app.</p>
+          </div>
+          <div className="card">
+            <h3>Team</h3>
+            <p>Pranjal Kwatra – Team Lead & Developer</p>
+            <p>Sheetal Sharma – UI/UX Designer</p>
+            <p>Prachi – Frontend Developer</p>
+            <p>Ravleen Kaur – Backend Developer</p>
+            <p>Raman Kaur – Quality Assurance & Testing</p>
           </div>
           <div className="card">
             <h3>What We Believe</h3>
             <p>Transparency, privacy, and simplicity. Your money should be easy to understand and manage.</p>
           </div>
           <div className="card">
-            <h3>Our Approach</h3>
-            <p>Real-time insights, AI guidance, and practical tools that meet you where you are in your financial journey.</p>
-          </div>
-          <div className="card">
             <h3>Contact</h3>
-            <p>India • 9999999999</p>
+            <p>Email: hello@finoa.app • Phone: +91-99999-99999</p>
+            <p>Support hours: Mon–Fri, 9am–6pm IST</p>
           </div>
         </div>
       </motion.div>
