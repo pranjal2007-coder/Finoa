@@ -38,3 +38,30 @@ Frontend is connected via REST API calls to fetch and process data.
 ---
 
 ## 📂 Project Structure
+
+```
+
+## Deploy to Vercel
+
+Monorepo with two projects (frontend and backend).
+
+Backend (Node/Express → Serverless)
+1) Root: `backend`
+2) Build command: none
+3) Output directory: (leave default)
+4) Env vars:
+   - `DATABASE_URL` (e.g., from Neon, include `?sslmode=require`)
+   - `OPENAI_API_KEY` (optional)
+   - `OPENAI_MODEL` (optional, default `gpt-4o-mini`)
+5) Entry: `api/index.js` (Vercel auto-detects)
+
+Frontend (Vite React)
+1) Root: `frontend`
+2) Build: `npm run build`
+3) Output: `dist`
+4) Env vars:
+   - `VITE_API_BASE=https://<your-backend>.vercel.app`
+
+Local dev
+- Backend: `npm ci && npm run dev` in `backend` (requires Postgres)
+- Frontend: `npm ci && npm run dev` in `frontend`
