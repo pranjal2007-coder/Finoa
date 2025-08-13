@@ -26,6 +26,8 @@ export async function migrate() {
       );
     `);
 
+    await client.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash TEXT;`);
+
     await client.query(`
       CREATE TABLE IF NOT EXISTS transactions (
         id UUID PRIMARY KEY,
@@ -51,6 +53,27 @@ export async function migrate() {
         period TEXT NOT NULL, -- 'monthly' | 'weekly'
         period_start DATE NOT NULL,
         total_budget_cents INTEGER NOT NULL,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      );
+    `);
+
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS settings (
+        user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+        monthly_income_cents INTEGER DEFAULT 0,
+        emergency_fund_cents INTEGER DEFAULT 0,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+      );
+    `);
+
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS goals (
+        id UUID PRIMARY KEY,
+        user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+        name TEXT NOT NULL,
+        cost_cents INTEGER NOT NULL,
+        deadline DATE NOT NULL,
+        saved_so_far_cents INTEGER DEFAULT 0,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
       );
     `);
