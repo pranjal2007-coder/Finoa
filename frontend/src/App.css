@@ -62,3 +62,8 @@ th, td { border-bottom: 1px solid #1f2a44; padding: 8px; text-align: left; }
 .hero { display:grid; grid-template-columns: 1.2fr 1fr; gap:16px; }
 .carousel { display:flex; gap:12px; overflow:auto; }
 .carousel img { height: 160px; border-radius: 12px; }
+
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeInUp 500ms ease-out; }
+.auth-card { max-width: 420px; margin: 0 auto; }
+.auth-form { display: grid; gap: 8px; margin-top: 8px; }

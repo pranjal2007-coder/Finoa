@@ -26,7 +26,7 @@ export async function migrate() {
       );
     `);
 
-    await client.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash TEXT;`);
+    await client.query(`ALTER TABLE users DROP COLUMN IF EXISTS password_hash;`);
 
     await client.query(`
       CREATE TABLE IF NOT EXISTS transactions (

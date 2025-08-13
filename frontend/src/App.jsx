@@ -8,6 +8,8 @@ import ExpenseTracker from './pages/ExpenseTracker'
 import SavingsInvestments from './pages/SavingsInvestments'
 import EmergencyFund from './pages/EmergencyFund'
 import ReportsInsights from './pages/ReportsInsights'
+import Login from './pages/Login'
+import Signup from './pages/Signup'
 import ProfileSettings from './pages/ProfileSettings'
 import About from './pages/About'
 import Contact from './pages/Contact'
@@ -21,6 +23,8 @@ function NavBar() {
     { to: '/savings', label: 'Savings & Investments' },
     { to: '/emergency', label: 'Emergency Fund' },
     { to: '/reports', label: 'Reports & Insights' },
+    { to: '/login', label: 'Sign In' },
+    { to: '/signup', label: 'Sign Up' },
     { to: '/profile', label: 'Profile & Settings' },
     { to: '/about', label: 'About Us' },
     { to: '/contact', label: 'Contact Us' },
@@ -72,6 +76,8 @@ function AnimatedRoutes() {
         <Route path="/savings" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><SavingsInvestments /></motion.div>} />
         <Route path="/emergency" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><EmergencyFund /></motion.div>} />
         <Route path="/reports" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><ReportsInsights /></motion.div>} />
+        <Route path="/login" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Login /></motion.div>} />
+        <Route path="/signup" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Signup /></motion.div>} />
         <Route path="/profile" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><ProfileSettings /></motion.div>} />
         <Route path="/about" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><About /></motion.div>} />
         <Route path="/contact" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Contact /></motion.div>} />
