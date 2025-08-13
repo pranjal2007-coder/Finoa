@@ -1,40 +1,41 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
-import { api } from '../lib/api'
+import { useData } from '../context/DataContext'
 
 export default function SavingsInvestments() {
-  const [profile, setProfile] = useState({ goal: '', horizon: '2', risk: 'moderate' })
-  const [advice, setAdvice] = useState('')
-  const [loading, setLoading] = useState(false)
+  const { state, selectors } = useData()
+  const [goalItem, setGoalItem] = useState('a new phone')
+  const [horizon, setHorizon] = useState(4) // weeks
 
-  async function submit(e) {
-    e.preventDefault()
-    setLoading(true)
-    try {
-      const userId = '00000000-0000-0000-0000-000000000001'
-      const q = `Suggest investments in India for goal: ${profile.goal}, years: ${profile.horizon}, risk: ${profile.risk}`
-      const res = await api('/ask', { method:'POST', body: JSON.stringify({ userId, question: q }) })
-      setAdvice(res.answer)
-    } catch (e) {
-      setAdvice('Unable to fetch suggestions right now.')
-    } finally { setLoading(false) }
-  }
+  const available = selectors.availableForSavings()
+
+  const weeklyPlan = useMemo(() => {
+    const perWeek = Math.floor(Math.max(0, available) / 4)
+    return Array.from({ length: horizon }, (_, i) => ({ week: i + 1, amount: perWeek }))
+  }, [available, horizon])
+
+  const tip = useMemo(() => {
+    const top = [...selectors.byCategoryThisMonth()].sort((a,b)=>b.amount-a.amount)[0]
+    if (!top) return 'Log some expenses to get personalized tips.'
+    return `Consider trimming ₹${Math.ceil(top.amount*0.1)} from ${top.category} to boost savings.`
+  }, [selectors])
 
   return (
     <div className="page">
       <motion.div className="card" initial={{opacity:0,y:10}} animate={{opacity:1,y:0}}>
         <h2>Savings & Investments</h2>
-        <form onSubmit={submit} style={{display:'grid', gridTemplateColumns:'1fr 1fr 1fr auto', gap:8}}>
-          <input placeholder="Your goal (e.g., car, house)" value={profile.goal} onChange={e=>setProfile({...profile, goal:e.target.value})} />
-          <input type="number" placeholder="Horizon (years)" value={profile.horizon} onChange={e=>setProfile({...profile, horizon:e.target.value})} />
-          <select value={profile.risk} onChange={e=>setProfile({...profile, risk:e.target.value})}>
-            <option value="conservative">Conservative</option>
-            <option value="moderate">Moderate</option>
-            <option value="aggressive">Aggressive</option>
-          </select>
-          <button className="button" type="submit" disabled={loading}>{loading ? 'Getting tips...' : 'Get Tips'}</button>
-        </form>
-        {advice && <p style={{marginTop:8}}>{advice}</p>}
+        <p>Available this month after expenses and emergency fund: <strong>₹{available.toLocaleString('en-IN')}</strong></p>
+        <div style={{display:'flex', gap:8, flexWrap:'wrap'}}>
+          <input value={goalItem} onChange={e=>setGoalItem(e.target.value)} placeholder="Goal item (e.g., phone)" />
+          <input type="number" value={horizon} onChange={e=>setHorizon(Number(e.target.value||0))} />
+        </div>
+        <h3 style={{marginTop:8}}>Weekly Savings Plan</h3>
+        <ul>
+          {weeklyPlan.map(w => (
+            <li key={w.week}>Week {w.week}: Save ₹{w.amount.toLocaleString('en-IN')}</li>
+          ))}
+        </ul>
+        <p><em>Tip:</em> {tip}</p>
       </motion.div>
     </div>
   )

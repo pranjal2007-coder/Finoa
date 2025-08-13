@@ -5,12 +5,15 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import './index.css'
 import App from './App.jsx'
+import { DataProvider } from './context/DataContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
-      <ToastContainer position="top-right" />
+      <DataProvider>
+        <App />
+        <ToastContainer position="top-right" />
+      </DataProvider>
     </BrowserRouter>
   </StrictMode>,
 )

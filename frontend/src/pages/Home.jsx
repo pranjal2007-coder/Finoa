@@ -2,34 +2,27 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Line, Doughnut } from 'react-chartjs-2'
 import { Chart as ChartJS, LineElement, ArcElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend } from 'chart.js'
-import { api } from '../lib/api'
+import { useData } from '../context/DataContext'
 
 ChartJS.register(LineElement, ArcElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend)
 
 export default function Home() {
+  const { state, selectors } = useData()
   const [aiQuestion, setAiQuestion] = useState('Suggest a way to save ₹1000 this month')
   const [aiAnswer, setAiAnswer] = useState('')
   const [loading, setLoading] = useState(false)
-  const [preview, setPreview] = useState({ total: 0, byCategory: [] })
   const recognitionRef = useRef(null)
 
-  useEffect(() => {
-    // anonymous demo user id (frontend only demo)
-    const demoUserId = '00000000-0000-0000-0000-000000000001'
-    api(`/summary?userId=${demoUserId}`).then(setPreview).catch(() => {})
-  }, [])
-
   async function askAI() {
+    setLoading(true)
     try {
-      setLoading(true)
-      const demoUserId = '00000000-0000-0000-0000-000000000001'
-      const res = await api('/ask', { method: 'POST', body: JSON.stringify({ userId: demoUserId, question: aiQuestion }) })
-      setAiAnswer(res.answer)
-    } catch (e) {
-      setAiAnswer('AI is currently unavailable. Please try again later.')
-    } finally {
-      setLoading(false)
-    }
+      const top = [...selectors.byCategoryThisMonth()].sort((a,b)=>b.amount-a.amount)[0]
+      const available = selectors.availableForSavings()
+      const answer = top
+        ? `You can save ₹${Math.min(available, 1000).toLocaleString('en-IN')} by trimming ₹${Math.ceil(top.amount*0.1)} from ${top.category}. Try reducing optional spends and track weekly.`
+        : `Start logging expenses. Aim to save ₹${Math.min(selectors.availableForSavings(), 1000).toLocaleString('en-IN')} this month by cutting small recurring costs.`
+      setAiAnswer(answer)
+    } finally { setLoading(false) }
   }
 
   function startVoice() {
@@ -41,7 +34,7 @@ export default function Home() {
       const text = Array.from(e.results).map(r => r[0].transcript).join(' ')
       setAiQuestion(text)
     }
-    rec.onerror = () => { /* ignore */ }
+    rec.onerror = () => {}
     rec.onend = () => { recognitionRef.current = null }
     recognitionRef.current = rec
     rec.start()
@@ -55,23 +48,23 @@ export default function Home() {
   }
 
   const doughnutData = useMemo(() => ({
-    labels: preview.byCategory.map(c => c.category),
+    labels: selectors.byCategoryThisMonth().map(c => c.category),
     datasets: [{
-      data: preview.byCategory.map(c => c.amount),
+      data: selectors.byCategoryThisMonth().map(c => c.amount),
       backgroundColor: ['#22c55e','#3b82f6','#f59e0b','#ef4444','#a78bfa','#06b6d4'],
       borderWidth: 0,
     }]
-  }), [preview])
+  }), [state.expenses])
 
   const lineData = useMemo(() => ({
-    labels: ['Week 1','Week 2','Week 3','Week 4'],
+    labels: ['Income','Expenses','Available'],
     datasets: [{
-      label: 'Savings (₹)',
-      data: [2000, 3500, 4200, 5000],
+      label: 'Overview (₹)',
+      data: [state.monthlyIncome, selectors.monthlyExpenseTotal(), selectors.availableForSavings()],
       borderColor: '#22c55e',
       backgroundColor: 'rgba(34,197,94,0.2)',
     }]
-  }), [])
+  }), [state.monthlyIncome, state.emergencyFund, state.expenses])
 
   return (
     <div className="page">
@@ -81,11 +74,11 @@ export default function Home() {
           <p>Overview & quick finance summary. Track expenses, plan budgets, and get smart savings tips.</p>
           <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:12}}>
             <div className="card">
-              <h3>Spending by Category</h3>
+              <h3>Spending by Category (This Month)</h3>
               <Doughnut data={doughnutData} />
             </div>
             <div className="card">
-              <h3>Savings Trend</h3>
+              <h3>Budget Overview</h3>
               <Line data={lineData} options={{ plugins:{legend:{display:false}} }} />
             </div>
           </div>
