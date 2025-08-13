@@ -1,0 +1,17 @@
+# Node/JS
+node_modules/
+dist/
+build/
+.vite/
+*.log
+coverage/
+
+# Env
+.env
+.env.*
+
+# OS/Editor
+.DS_Store
+*.swp
+.idea/
+.vscode/
