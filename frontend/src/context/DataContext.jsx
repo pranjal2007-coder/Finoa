@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react'
 const DataContext = createContext(null)
 
 const STORAGE_KEY = 'finova_state'
+const DEFAULT_CATEGORIES = ['Food','Transport','Bills','Shopping','Entertainment','Other']
 
 function generateId() {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
@@ -14,13 +15,14 @@ export function DataProvider({ children }) {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null')
       if (saved) return saved
     } catch {}
-    // bootstrap from previous login/signup keys if present
     let user = null
     try { user = JSON.parse(localStorage.getItem('finova_user') || 'null') } catch {}
+    const categoryBudgets = Object.fromEntries(DEFAULT_CATEGORIES.map(c => [c, 0]))
     return {
       user: user ? { name: user.name, email: user.email } : null,
       monthlyIncome: 0,
       emergencyFund: 0,
+      categoryBudgets,
       expenses: [],
       goals: [],
     }
@@ -34,6 +36,7 @@ export function DataProvider({ children }) {
     setUser(user) { setState(s => ({ ...s, user })) },
     setMonthlyIncome(amount) { setState(s => ({ ...s, monthlyIncome: Number(amount) || 0 })) },
     setEmergencyFund(amount) { setState(s => ({ ...s, emergencyFund: Number(amount) || 0 })) },
+    setCategoryBudget(category, amount) { setState(s => ({ ...s, categoryBudgets: { ...s.categoryBudgets, [category]: Number(amount)||0 } })) },
 
     addExpense(expense) {
       const e = { id: generateId(), date: expense.date || new Date().toISOString().slice(0,10), category: expense.category, name: expense.name, cost: Number(expense.cost) || 0 }
@@ -57,12 +60,13 @@ export function DataProvider({ children }) {
   }), [])
 
   const selectors = useMemo(() => ({
+    monthKey() { return new Date().toISOString().slice(0,7) },
     monthlyExpenseTotal() {
-      const month = new Date().toISOString().slice(0,7) // YYYY-MM
+      const month = selectors.monthKey()
       return state.expenses.filter(e => (e.date || '').startsWith(month)).reduce((sum,e)=>sum+e.cost,0)
     },
     byCategoryThisMonth() {
-      const month = new Date().toISOString().slice(0,7)
+      const month = selectors.monthKey()
       const map = {}
       for (const e of state.expenses) {
         if (!e.date || !e.date.startsWith(month)) continue
@@ -70,15 +74,47 @@ export function DataProvider({ children }) {
       }
       return Object.entries(map).map(([category, amount]) => ({ category, amount }))
     },
+    categorySpendThisMonth(category) {
+      const month = selectors.monthKey()
+      return state.expenses.filter(e => e.category === category && (e.date||'').startsWith(month)).reduce((s,e)=>s+e.cost,0)
+    },
     availableForSavings() {
       const income = state.monthlyIncome || 0
       const expenses = selectors.monthlyExpenseTotal()
       const reserved = state.emergencyFund || 0
       return Math.max(0, income - expenses - reserved)
+    },
+    overallUnderBudget() {
+      return selectors.monthlyExpenseTotal() < Math.max(0, state.monthlyIncome - state.emergencyFund)
+    },
+    categoryUnderBudget(category) {
+      const cap = state.categoryBudgets?.[category] || 0
+      if (!cap) return null
+      return selectors.categorySpendThisMonth(category) <= cap
+    },
+    notifications() {
+      const notes = []
+      if (selectors.overallUnderBudget()) {
+        notes.push({ type: 'success', text: 'Congratulations! You are under your monthly budget.' })
+      }
+      for (const [cat, cap] of Object.entries(state.categoryBudgets||{})) {
+        if (!cap) continue
+        const spent = selectors.categorySpendThisMonth(cat)
+        if (spent > cap) notes.push({ type: 'warn', text: `You exceeded the ${cat} budget.` })
+      }
+      const today = new Date()
+      for (const g of state.goals) {
+        const daysLeft = Math.ceil((new Date(g.deadline) - today) / (1000*60*60*24))
+        const remaining = Math.max(0, g.cost - g.savedSoFar)
+        if (daysLeft <= 14 && remaining > 0) {
+          notes.push({ type: 'reminder', text: `Goal '${g.name}' is due in ${daysLeft} days. Save ₹${Math.ceil(remaining/Math.max(1,daysLeft))}/day.` })
+        }
+      }
+      return notes
     }
   }), [state])
 
-  const value = useMemo(() => ({ state, actions, selectors }), [state, actions, selectors])
+  const value = useMemo(() => ({ state, actions, selectors, DEFAULT_CATEGORIES }), [state, actions, selectors])
 
   return (
     <DataContext.Provider value={value}>{children}</DataContext.Provider>
