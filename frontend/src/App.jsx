@@ -1,7 +1,7 @@
 import { Routes, Route, NavLink } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useLocation } from 'react-router-dom'
-import { FaPiggyBank, FaChartPie, FaUserCircle } from 'react-icons/fa'
+import { FaPiggyBank, FaChartPie, FaUserCircle, FaBell, FaFacebook, FaTwitter, FaLinkedin, FaInstagram } from 'react-icons/fa'
 import Home from './pages/Home'
 import BudgetPlanner from './pages/BudgetPlanner'
 import ExpenseTracker from './pages/ExpenseTracker'
@@ -13,6 +13,9 @@ import Signup from './pages/Signup'
 import ProfileSettings from './pages/ProfileSettings'
 import About from './pages/About'
 import Contact from './pages/Contact'
+import Goals from './pages/Goals'
+import ChatWidget from './components/ChatWidget'
+import { useData } from './context/DataContext'
 import './App.css'
 
 function NavBar() {
@@ -22,6 +25,7 @@ function NavBar() {
     { to: '/expenses', label: 'Expense Tracker' },
     { to: '/savings', label: 'Savings & Investments' },
     { to: '/emergency', label: 'Emergency Fund' },
+    { to: '/goals', label: 'Goals' },
     { to: '/reports', label: 'Reports & Insights' },
     { to: '/login', label: 'Sign In' },
     { to: '/signup', label: 'Sign Up' },
@@ -29,6 +33,8 @@ function NavBar() {
     { to: '/about', label: 'About Us' },
     { to: '/contact', label: 'Contact Us' },
   ]
+  const { selectors } = useData()
+  const notes = selectors.notifications()
   return (
     <nav className="navbar">
       <div className="brand"><FaPiggyBank /> Finova</div>
@@ -37,7 +43,11 @@ function NavBar() {
           <NavLink key={l.to} to={l.to} className={({isActive}) => isActive ? 'active' : ''}>{l.label}</NavLink>
         ))}
       </div>
-      <div className="nav-right"><FaChartPie /><FaUserCircle /></div>
+      <div className="nav-right">
+        <div className="bell"><FaBell />{notes.length>0 && <span className="badge">{notes.length}</span>}</div>
+        <FaChartPie />
+        <FaUserCircle />
+      </div>
     </nav>
   )
 }
@@ -45,15 +55,42 @@ function NavBar() {
 function Footer() {
   return (
     <footer className="footer">
-      <div>
-        <strong>Finova</strong>
-        <p>123 Finance Street, Mumbai, MH 400001</p>
-        <p>Email: support@finova.example • Phone: +91 90000 00000</p>
-      </div>
-      <div className="footer-links">
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-        <a href="#">Careers</a>
+      <div className="footer-grid">
+        <div>
+          <h4>Finvolv</h4>
+          <p>Finvolv simplifies how you manage, grow, and understand your money—with intelligent tools, real-time insights, and an all-in-one financial dashboard.</p>
+          <p>Address: India • Phone: 9999999999</p>
+          <div style={{display:'flex', gap:8, fontSize:20, marginTop:6}}>
+            <a href="#"><FaFacebook /></a>
+            <a href="#"><FaTwitter /></a>
+            <a href="#"><FaLinkedin /></a>
+            <a href="#"><FaInstagram /></a>
+          </div>
+        </div>
+        <div>
+          <h4>Product</h4>
+          <a href="#">Features</a>
+          <a href="#">Pricing</a>
+          <a href="#">Career</a>
+          <a href="#">Integration</a>
+          <a href="#">FAQ</a>
+        </div>
+        <div>
+          <h4>Resources</h4>
+          <a href="#">About</a>
+          <a href="#">Contact</a>
+          <a href="#">Blogs</a>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms & Conditions</a>
+        </div>
+        <div>
+          <h4>User Account</h4>
+          <a href="/login">Login</a>
+          <a href="/signup">Sign Up</a>
+        </div>
       </div>
     </footer>
   )
@@ -75,6 +112,7 @@ function AnimatedRoutes() {
         <Route path="/expenses" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><ExpenseTracker /></motion.div>} />
         <Route path="/savings" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><SavingsInvestments /></motion.div>} />
         <Route path="/emergency" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><EmergencyFund /></motion.div>} />
+        <Route path="/goals" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Goals /></motion.div>} />
         <Route path="/reports" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><ReportsInsights /></motion.div>} />
         <Route path="/login" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Login /></motion.div>} />
         <Route path="/signup" element={<motion.div initial="initial" animate="in" exit="out" variants={pageVariants}><Signup /></motion.div>} />
@@ -91,6 +129,7 @@ export default function App() {
     <div className="app">
       <NavBar />
       <AnimatedRoutes />
+      <ChatWidget />
       <Footer />
     </div>
   )

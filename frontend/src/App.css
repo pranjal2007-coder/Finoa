@@ -41,28 +41,33 @@
   color: #888;
 }
 
-.app { min-height: 100vh; display: flex; flex-direction: column; }
-.navbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: #0f172a; color: #e2e8f0; }
-.navbar .brand { display:flex; align-items:center; gap:8px; font-weight:700; }
-.navbar .nav-links { display:flex; gap: 12px; }
-.navbar a { color: #cbd5e1; text-decoration: none; padding: 6px 10px; border-radius: 8px; }
-.navbar a.active, .navbar a:hover { background: #1e293b; color: #ffffff; }
-.navbar .nav-right { display:flex; gap:12px; font-size:20px; }
-.footer { margin-top: auto; background: #0f172a; color:#94a3b8; padding: 24px; display:flex; align-items:center; justify-content: space-between; }
-.footer a { color:#cbd5e1; text-decoration:none; margin-right:12px; }
+.app { min-height: 100vh; display: flex; flex-direction: column; background: #090f1a; }
+.navbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: linear-gradient(90deg, #0b1220, #0f172a); color: #e2e8f0; border-bottom: 1px solid #1f2a44; }
+.navbar .brand { display:flex; align-items:center; gap:8px; font-weight:800; font-size: 18px; color:#60a5fa; }
+.navbar .nav-links { display:flex; gap: 12px; flex-wrap: wrap; }
+.navbar a { color: #cbd5e1; text-decoration: none; padding: 6px 10px; border-radius: 8px; transition: all .2s; }
+.navbar a.active, .navbar a:hover { background: #1e293b; color: #ffffff; box-shadow: 0 6px 20px rgba(2,132,199,.2); }
+.navbar .nav-right { display:flex; gap:12px; font-size:20px; position: relative; }
+.bell { position: relative; }
+.bell .badge { position:absolute; top:-6px; right:-6px; background:#ef4444; color:#fff; font-size:11px; padding:2px 6px; border-radius:999px; }
+.footer { margin-top: auto; background: #0b1220; color:#94a3b8; padding: 32px 20px; border-top:1px solid #1f2a44; }
+.footer-grid { display:grid; grid-template-columns: 1.4fr repeat(4, 1fr); gap: 16px; }
+.footer h4 { color:#e2e8f0; margin: 0 0 8px 0; }
+.footer a { color:#cbd5e1; text-decoration:none; display:block; margin:4px 0; }
 .footer a:hover { color: #ffffff; }
-.page { padding: 20px; max-width: 1100px; margin: 0 auto; }
-.card { background: #0b1220; color: #e2e8f0; border: 1px solid #1f2a44; padding: 16px; border-radius: 12px; }
-.button { background: #22c55e; color: #0b1220; border: none; padding: 10px 14px; border-radius: 10px; cursor:pointer; }
-.button:hover { filter: brightness(1.1); }
-input, select { background: #0b1220; color:#e2e8f0; border:1px solid #1f2a44; border-radius:10px; padding:8px; }
+.page { padding: 20px; max-width: 1200px; margin: 0 auto; }
+.card { background: radial-gradient(1200px 220px at top left, rgba(37,99,235,0.06), transparent), #0b1220; color: #e2e8f0; border: 1px solid #1f2a44; padding: 16px; border-radius: 14px; box-shadow: 0 10px 30px rgba(2,132,199,.08); }
+.button { background: linear-gradient(90deg, #2563eb, #1d4ed8); color: #fff; border: none; padding: 10px 14px; border-radius: 10px; cursor:pointer; transition: transform .15s ease, filter .2s; }
+.button:hover { filter: brightness(1.1); transform: translateY(-1px); }
+input, select, textarea { background: #0b1220; color:#e2e8f0; border:1px solid #1f2a44; border-radius:10px; padding:10px; outline:none; }
 label { color:#cbd5e1; }
 table { width: 100%; border-collapse: collapse; }
-th, td { border-bottom: 1px solid #1f2a44; padding: 8px; text-align: left; }
+th, td { border-bottom: 1px solid #1f2a44; padding: 10px; text-align: left; }
 .hero { display:grid; grid-template-columns: 1.2fr 1fr; gap:16px; }
+@media (max-width: 900px) { .hero { grid-template-columns: 1fr; } .footer-grid { grid-template-columns: 1fr 1fr; } }
 .carousel { display:flex; gap:12px; overflow:auto; }
 .carousel img { height: 160px; border-radius: 12px; }
-
+.banner { background:#0a1222; border:1px solid #1f2a44; color:#9ae6b4; padding:10px 12px; border-radius:10px; margin: 12px 0; }
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .fade-in { animation: fadeInUp 500ms ease-out; }
 .auth-card { max-width: 420px; margin: 0 auto; }
